@@ -1,20 +1,17 @@
 <!doctype HTML>
 <html>
 <script src="https://aframe.io/releases/1.0.0/aframe.min.js"></script>
-<script src="https://raw.githack.com/jeromeetienne/AR.js/1.7.5/aframe/build/aframe-ar.js"></script>
+<script src="https://raw.githack.com/jeromeetienne/AR.js/2.1.8/aframe/build/aframe-ar.js"></script>
   <body style='margin : 0px; overflow: hidden;'>
-    <a-scene embedded arjs>
-   		<!-- define your gltf asset -->
-		<a-assets>
-  			<a-asset-item id="tree" src="/3DModels/tree.glb"></a-asset-item>
-		</a-assets>
+    <a-scene embedded arjs=’sourceType: webcam;’>
+    	
+    	<!-- Element a display -->
+      <a-marker type='pattern' url='https://raw.githubusercontent.com/Sirius129/ARTest/master/3DModels/pattern-Untitled-1.patt'>
+          <a-entity gltf-model=”url(https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/master/2.0/RiggedFigure/glTF/RiggedFigure.gltf)” scale="1 1 1"></a-entity>
+      </a-marker>
 
-	  	<a-marker preset="hiro">
-			<!--use your gltf model -->
-			<a-entity gltf-model="##tree"></a-entity>
-	  	</a-marker>
+      <a-entity camera></a-entity>
 
-	  	<a-entity camera></a-entity>
     </a-scene>
   </body>
 </html>
