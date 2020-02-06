@@ -4,13 +4,13 @@
 <script src="https://raw.githack.com/jeromeetienne/AR.js/1.7.5/aframe/build/aframe-ar.js"></script>
   <body style='margin : 0px; overflow: hidden;'>
     <a-scene embedded arjs>
-  	<a-marker preset="hiro">
-        <a-box position='0 0.5 0' material='color: blue;'></a-box>
-        <!-- define your gltf asset -->
-		<!--<a-assets>
+   		<!-- define your gltf asset -->
+		<a-assets>
   			<a-asset-item id="tree" src="/3DModels/tree.glb"></a-asset-item>
 		</a-assets>
-		<!-- use your gltf model --
+  	<a-marker preset="hiro">
+        <!-- <a-box position='0 0.5 0' material='color: blue;'></a-box>-->
+		<!--use your gltf model -->
 		<a-entity gltf-model="##tree"></a-entity>-->
   	</a-marker>
   	<a-entity camera></a-entity>
