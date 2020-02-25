@@ -1,0 +1,48 @@
+newmtl Pine_aleppo_79_1_46bb013f
+Ka   0.500 0.500 0.500
+Kd   0.700 0.700 0.700
+Ks   0.000 0.000 0.000
+illum 2
+Ns 0.000
+Tr 1.00
+map_Kd Pine_aleppo_79_1_46bb013f.png
+newmtl Pine_aleppo_79_1_46bb113f
+Ka   0.500 0.500 0.500
+Kd   0.700 0.700 0.700
+Ks   0.000 0.000 0.000
+illum 2
+Ns 0.000
+Tr 1.00
+map_Kd Pine_aleppo_79_1_46bb113f.png
+newmtl Pine_aleppo_79_1_46bb141f
+Ka   0.500 0.500 0.500
+Kd   0.700 0.700 0.700
+Ks   0.000 0.000 0.000
+illum 2
+Ns 0.000
+Tr 1.00
+map_Kd Pine_aleppo_79_1_46bb141f.png
+newmtl Pine_aleppo_79_1_46bb151f
+Ka   0.500 0.500 0.500
+Kd   0.700 0.700 0.700
+Ks   0.000 0.000 0.000
+illum 2
+Ns 0.000
+Tr 1.00
+map_Kd Pine_aleppo_79_1_46bb151f.png
+newmtl Pine_aleppo_79_1_46bb077f
+Ka   0.500 0.500 0.500
+Kd   0.700 0.700 0.700
+Ks   0.000 0.000 0.000
+illum 2
+Ns 0.000
+Tr 1.00
+map_Kd Pine_aleppo_79_1_46bb077f.png
+newmtl Pine_aleppo_bark
+Ka   0.500 0.500 0.500
+Kd   0.700 0.700 0.700
+Ks   0.000 0.000 0.000
+illum 2
+Ns 0.000
+Tr 1.00
+map_Kd Pine_aleppo_bark.png
