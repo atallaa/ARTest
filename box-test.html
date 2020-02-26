@@ -14,62 +14,36 @@
         <!-- we add detectionMode and matrixCodeType to tell AR.js to recognize barcode markers -->
         <a-scene embedded arjs='sourceType: webcam; debugUIEnabled: false; detectionMode: mono_and_matrix; matrixCodeType: 3x3;'>
 
-        <!-- Here are our entities -->
-
         <a-marker markerhandler emitevents="true" cursor="rayOrigin: mouse" id="animated-marker" type='pattern' url='https://raw.githubusercontent.com/Sirius129/ARTest/master/Pattern/pattern-P1.patt'>
-        	<a-entity scale="0.2 0.2 0.2"
-                id="pine"
-                obj-model='obj: url(https://raw.githubusercontent.com/Sirius129/ARTest/master/3DModels/lowpoltree/tree.obj);
-                mtl: url(https://raw.githubusercontent.com/Sirius129/ARTest/master/3DModels/lowpoltree/tree.mtl)'>
+                      <a-box position='0 0.5 0' material='color: yellow;'></a-box>
         </a-marker>
 
         <a-marker markerhandler emitevents="true" cursor="rayOrigin: mouse" id="animated-marker" type='pattern' url='https://raw.githubusercontent.com/Sirius129/ARTest/master/Pattern/pattern-P2.patt'>
-        	<a-entity scale="0.2 0.2 0.2"
-                id="pine"
-                obj-model='obj: url(https://raw.githubusercontent.com/Sirius129/ARTest/master/3DModels/lowpoltree/tree.obj);
-                mtl: url(https://raw.githubusercontent.com/Sirius129/ARTest/master/3DModels/lowpoltree/tree.mtl)'>
+        	          <a-box position='0 0.5 0' material='color: blue;'></a-box>
         </a-marker>
 
         <a-marker markerhandler emitevents="true" cursor="rayOrigin: mouse" id="animated-marker" type='pattern' url='https://raw.githubusercontent.com/Sirius129/ARTest/master/Pattern/pattern-P3.patt'>
-        	<a-entity scale="0.2 0.2 0.2"
-                id="pine"
-                obj-model='obj: url(https://raw.githubusercontent.com/Sirius129/ARTest/master/3DModels/lowpoltree/tree.obj);
-                mtl: url(https://raw.githubusercontent.com/Sirius129/ARTest/master/3DModels/lowpoltree/tree.mtl)'>
+        	          <a-box position='0 0.5 0' material='color: red;'></a-box>
         </a-marker>
 
-        <a-marker markerhandler emitevents="true" cursor="rayOrigin: mouse" id="animated-marker" type='pattern' url='https://raw.githubusercontent.com/Sirius129/ARTest/master/Pattern/pattern-P4.patt'>
-        	<a-entity scale="0.2 0.2 0.2"
-                id="pine"
-                obj-model='obj: url(https://raw.githubusercontent.com/Sirius129/ARTest/master/3DModels/lowpoltree/tree.obj);
-                mtl: url(https://raw.githubusercontent.com/Sirius129/ARTest/master/3DModels/lowpoltree/tree.mtl)'>
+         <a-marker markerhandler emitevents="true" cursor="rayOrigin: mouse" id="animated-marker" type='pattern' url='https://raw.githubusercontent.com/Sirius129/ARTest/master/Pattern/pattern-P4.patt'>
+        	          <a-box position='0 0.5 0' material='color: purple;'></a-box>
         </a-marker>
 
         <a-marker markerhandler emitevents="true" cursor="rayOrigin: mouse" id="animated-marker" type='pattern' url='https://raw.githubusercontent.com/Sirius129/ARTest/master/Pattern/pattern-P6.patt'>
-        	<a-entity scale="0.2 0.2 0.2"
-                id="pine"
-                obj-model='obj: url(https://raw.githubusercontent.com/Sirius129/ARTest/master/3DModels/lowpoltree/tree.obj);
-                mtl: url(https://raw.githubusercontent.com/Sirius129/ARTest/master/3DModels/lowpoltree/tree.mtl)'>
+        	          <a-box position='0 0.5 0' material='color: green;'></a-box>
         </a-marker>
 
         <a-marker markerhandler emitevents="true" cursor="rayOrigin: mouse" id="animated-marker" type='pattern' url='https://raw.githubusercontent.com/Sirius129/ARTest/master/Pattern/pattern-P7.patt'>
-        	<a-entity scale="0.2 0.2 0.2"
-                id="pine"
-                obj-model='obj: url(https://raw.githubusercontent.com/Sirius129/ARTest/master/3DModels/lowpoltree/tree.obj);
-                mtl: url(https://raw.githubusercontent.com/Sirius129/ARTest/master/3DModels/lowpoltree/tree.mtl)'>
+        	          <a-box position='0 0.5 0' material='color: black;'></a-box>
         </a-marker>
 
         <a-marker markerhandler emitevents="true" cursor="rayOrigin: mouse" id="animated-marker" type='pattern' url='https://raw.githubusercontent.com/Sirius129/ARTest/master/Pattern/pattern-P8.patt'>
-        	<a-entity scale="0.2 0.2 0.2"
-                id="pine"
-                obj-model='obj: url(https://raw.githubusercontent.com/Sirius129/ARTest/master/3DModels/lowpoltree/tree.obj);
-                mtl: url(https://raw.githubusercontent.com/Sirius129/ARTest/master/3DModels/lowpoltree/tree.mtl)'>
+        	          <a-box position='0 0.5 0' material='color: white;'></a-box>
         </a-marker>
 
         <a-marker markerhandler emitevents="true" cursor="rayOrigin: mouse" id="animated-marker" type='pattern' url='https://raw.githubusercontent.com/Sirius129/ARTest/master/Pattern/pattern-P9.patt'>
-        	<a-entity scale="0.2 0.2 0.2"
-                id="pine"
-                obj-model='obj: url(https://raw.githubusercontent.com/Sirius129/ARTest/master/3DModels/lowpoltree/tree.obj);
-                mtl: url(https://raw.githubusercontent.com/Sirius129/ARTest/master/3DModels/lowpoltree/tree.mtl)'>
+        	          <a-box position='0 0.5 0' material='color: gray;'></a-box>
         </a-marker>
 
         <!-- use this <a-entity camera> to support multiple-markers, otherwise use <a-marker-camera> instead of </a-marker> -->
