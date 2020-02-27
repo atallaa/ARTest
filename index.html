@@ -1,9 +1,16 @@
 <!doctype HTML>
 <html>
-<script src="https://aframe.io/releases/1.0.0/aframe.min.js"></script>
-<script src="https://raw.githack.com/jeromeetienne/AR.js/2.2.1/aframe/build/aframe-ar.js"></script>
-  <body style='margin : 0px; overflow: hidden;'>
-    <a-scene embedded arjs>
+    <head>
+        <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+    </head>
+    <script src="https://aframe.io/releases/0.9.1/aframe.min.js"></script>
+    <script src="https://rawgit.com/jeromeetienne/AR.js/master/aframe/build/aframe-ar.min.js"></script>
+    
+    
+    <body style='margin : 0px; overflow: hidden;'>
+        <a-scene embedded arjs>
+
+        <!-- Here are our entities -->
 
         <!-- My trees -->
         <a-marker markerhandler emitevents="true" cursor="rayOrigin: mouse" id="animated-marker" type='pattern' url='https://raw.githubusercontent.com/Sirius129/ARTest/master/Pattern/pattern-P1.patt'>
@@ -35,7 +42,7 @@
         </a-marker>
 
         <a-marker markerhandler emitevents="true" cursor="rayOrigin: mouse" id="animated-marker" type='pattern' url='https://raw.githubusercontent.com/Sirius129/ARTest/master/Pattern/pattern-P5.patt'>
-        	<a-entity scale="0.2 0.2 0.2"
+            <a-entity scale="0.2 0.2 0.2"
                 id="pine"
                 obj-model='obj: url(https://raw.githubusercontent.com/Sirius129/ARTest/master/3DModels/lowpoltree/tree.obj);
                 mtl: url(https://raw.githubusercontent.com/Sirius129/ARTest/master/3DModels/lowpoltree/tree.mtl)'>
@@ -72,43 +79,43 @@
 
         <!-- My crops -->
         <a-marker markerhandler emitevents="true" cursor="rayOrigin: mouse" id="animated-marker" type='pattern' url='https://raw.githubusercontent.com/Sirius129/ARTest/master/Pattern/pattern-N1.patt'>
-            <a-box scale="1.5 0.2 1.5" position='0 0 0' material='color: orange;'></a-box>
+            <a-box scale="1.5 0.2 1.5" position='0 0 0' src='https://raw.githubusercontent.com/Sirius129/ARTest/master/3DModels/crop.png'></a-box>
         </a-marker>
 
         <a-marker markerhandler emitevents="true" cursor="rayOrigin: mouse" id="animated-marker" type='pattern' url='https://raw.githubusercontent.com/Sirius129/ARTest/master/Pattern/pattern-N2.patt'>
-            <a-box scale="1.5 0.2 1.5" position='0 0 0' material='color: orange;'></a-box>
+            <a-box scale="1.5 0.2 1.5" position='0 0 0' src='https://raw.githubusercontent.com/Sirius129/ARTest/master/3DModels/crop.png'></a-box>
         </a-marker>
 
         <a-marker markerhandler emitevents="true" cursor="rayOrigin: mouse" id="animated-marker" type='pattern' url='https://raw.githubusercontent.com/Sirius129/ARTest/master/Pattern/pattern-N3.patt'>
-            <a-box scale="1.5 0.2 1.5" position='0 0 0' material='color: orange;'></a-box>
+            <a-box scale="1.5 0.2 1.5" position='0 0 0' src='https://raw.githubusercontent.com/Sirius129/ARTest/master/3DModels/crop.png'></a-box>
         </a-marker>
 
         <a-marker markerhandler emitevents="true" cursor="rayOrigin: mouse" id="animated-marker" type='pattern' url='https://raw.githubusercontent.com/Sirius129/ARTest/master/Pattern/pattern-N4.patt'>
-            <a-box scale="1.5 0.2 1.5" position='0 0 0' material='color: orange;'></a-box>
+            <a-box scale="1.5 0.2 1.5" position='0 0 0' src='https://raw.githubusercontent.com/Sirius129/ARTest/master/3DModels/crop.png'></a-box>
         </a-marker>
 
         <a-marker markerhandler emitevents="true" cursor="rayOrigin: mouse" id="animated-marker" type='pattern' url='https://raw.githubusercontent.com/Sirius129/ARTest/master/Pattern/pattern-N5.patt'>
-            <a-box scale="1.5 0.2 1.5" position='0 0 0' material='color: orange;'></a-box>
+            <a-box scale="1.5 0.2 1.5" position='0 0 0' src='https://raw.githubusercontent.com/Sirius129/ARTest/master/3DModels/crop.png'></a-box>
         </a-marker>
 
         <a-marker markerhandler emitevents="true" cursor="rayOrigin: mouse" id="animated-marker" type='pattern' url='https://raw.githubusercontent.com/Sirius129/ARTest/master/Pattern/pattern-N6.patt'>
-            <a-box scale="1.5 0.2 1.5" position='0 0 0' material='color: orange;'></a-box>
+            <a-box scale="1.5 0.2 1.5" position='0 0 0' src='https://raw.githubusercontent.com/Sirius129/ARTest/master/3DModels/crop.png'></a-box>
         </a-marker>
 
         <a-marker markerhandler emitevents="true" cursor="rayOrigin: mouse" id="animated-marker" type='pattern' url='https://raw.githubusercontent.com/Sirius129/ARTest/master/Pattern/pattern-N7.patt'>
-            <a-box scale="1.5 0.2 1.5" position='0 0 0' material='color: orange;'></a-box>
+            <a-box scale="1.5 0.2 1.5" position='0 0 0' src='https://raw.githubusercontent.com/Sirius129/ARTest/master/3DModels/crop.png'></a-box>
         </a-marker>
 
         <a-marker markerhandler emitevents="true" cursor="rayOrigin: mouse" id="animated-marker" type='pattern' url='https://raw.githubusercontent.com/Sirius129/ARTest/master/Pattern/pattern-N8.patt'>
-            <a-box scale="1.5 0.2 1.5" position='0 0 0' material='color: orange;'></a-box>
+            <a-box scale="1.5 0.2 1.5" position='0 0 0' src='https://raw.githubusercontent.com/Sirius129/ARTest/master/3DModels/crop.png'></a-box>
         </a-marker>
 
         <a-marker markerhandler emitevents="true" cursor="rayOrigin: mouse" id="animated-marker" type='pattern' url='https://raw.githubusercontent.com/Sirius129/ARTest/master/Pattern/pattern-N9.patt'>
-            <a-box scale="1.5 0.2 1.5" position='0 0 0' material='color: orange;'></a-box>
+            <a-box scale="1.5 0.2 1.5" position='0 0 0' src='https://raw.githubusercontent.com/Sirius129/ARTest/master/3DModels/crop.png'></a-box>
         </a-marker>
 
-
-      <a-entity camera></a-entity>
-    </a-scene>
-  </body>
+        <!-- use this <a-entity camera> to support multiple-markers, otherwise use <a-marker-camera> instead of </a-marker> -->
+        <a-entity camera></a-entity>
+        </a-scene>
+    </body>
 </html>
