@@ -5,8 +5,8 @@ newmtl Noyer1
 	d 1
 	illum 2
 	Kd 0.8 0.8 0.8
-	Ks 0.0 0.0 0.0
-	Ka 0.5 0.5 0.5
+	Ks 0.5 0.5 0.5
+	Ka 1.0 1.0 1.0
 	map_Kd Noyer_0020_1.png
 
 newmtl Noyer2
@@ -14,8 +14,8 @@ newmtl Noyer2
 	d 1
 	illum 2
 	Kd 0.8 0.8 0.8
-	Ks 0.0 0.0 0.0
-	Ka 0.5 0.5 0.5
+	Ks 0.5 0.5 0.5
+	Ka 1.0 1.0 1.0
 	map_Kd Noyer_0020_2.png
 
 newmtl Noyer3
@@ -23,6 +23,6 @@ newmtl Noyer3
 	d 1
 	illum 2
 	Kd 0.8 0.8 0.8
-	Ks 0.0 0.0 0.0
-	Ka 0.5 0.5 0.5
+	Ks 0.5 0.5 0.5
+	Ka 1.0 1.0 1.0
 	map_Kd Noyer_0020_0.png
