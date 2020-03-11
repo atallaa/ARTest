@@ -10,8 +10,7 @@ AFRAME.registerComponent('markerhandler', {
             if (aEntity && intersectedElement === aEntity) {
                 const objModel = aEntity.getAttribute('obj-model');
                 var treeNumber = Number((JSON.stringify(objModel).match(/\d/g)[1]+""+JSON.stringify(objModel).match(/\d/g)[2]));
-                console.log(treeNumber);
-                              treeNumber = treeNumber+10;   
+                treeNumber = treeNumber+10;   
                 if(treeNumber==15){
                   aEntity.setAttribute('obj-model', 'obj: #tree10-obj; mtl: #tree10-mtl;');
                   throw'';
