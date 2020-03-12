@@ -2,7 +2,7 @@
 
 newmtl Noyer1
 	Ns 0
-	d 1
+	d 0.999
 	illum 2
 	Kd 0.8 0.8 0.8
 	Ks 0.0 0.0 0.0
@@ -11,7 +11,7 @@ newmtl Noyer1
 
 newmtl Noyer2
 	Ns 0
-	d 1
+	d 0.999
 	illum 2
 	Kd 0.8 0.8 0.8
 	Ks 0.0 0.0 0.0
@@ -20,7 +20,7 @@ newmtl Noyer2
 
 newmtl Noyer3
 	Ns 0
-	d 1
+	d 0.999
 	illum 2
 	Kd 0.8 0.8 0.8
 	Ks 0.0 0.0 0.0
