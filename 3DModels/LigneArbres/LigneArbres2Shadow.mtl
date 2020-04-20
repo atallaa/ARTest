@@ -1,0 +1,56 @@
+# Material file for LigneArbres2Shadow.obj
+
+newmtl LigneArbres
+	Ns 0
+	d 1
+	illum 2
+	Kd 0.8 0.8 0.8
+	Ks 0.0 0.0 0.0
+	Ka 1.0 1.0 1.0
+	map_Kd LigneArbres512.png
+
+newmtl Marronnier
+	Ns 0
+	d 1
+	illum 2
+	Kd 0.8 0.8 0.8
+	Ks 0.0 0.0 0.0
+	Ka 1.0 1.0 1.0
+	map_Kd Marronnier.png
+
+newmtl Peup_Tremble
+	Ns 0
+	d 1
+	illum 2
+	Kd 0.8 0.8 0.8
+	Ks 0.0 0.0 0.0
+	Ka 1.0 1.0 1.0
+	map_Kd Peup_Tremble.png
+
+newmtl Peup_Noir
+	Ns 0
+	d 1
+	illum 2
+	Kd 0.8 0.8 0.8
+	Ks 0.0 0.0 0.0
+	Ka 1.0 1.0 1.0
+	map_Kd Peup_Noir.png
+
+newmtl Peup_Italy
+	Ns 0
+	d 1
+	illum 2
+	Kd 0.8 0.8 0.8
+	Ks 0.0 0.0 0.0
+	Ka 1.0 1.0 1.0
+	map_Kd Peup_Italy.png
+
+newmtl LigneArbresShadow
+	Ns 0
+	d 1
+	illum 2
+	Kd 0.8 0.8 0.8
+	Ks 0.0 0.0 0.0
+	Ka 1.0 1.0 1.0
+	map_Kd LigneArbresShadow512.png
+

@@ -1,0 +1,32 @@
+newmtl Horsechestnut-a_bark
+Ka   0.500 0.500 0.500
+Kd   0.700 0.700 0.700
+Ks   0.000 0.000 0.000
+illum 2
+Ns 0.000
+Tr 1.00
+map_Kd Horsechestnut-a_bark.png
+newmtl Horsechestnut-a_33_2_44bb018f
+Ka   0.500 0.500 0.500
+Kd   0.700 0.700 0.700
+Ks   0.000 0.000 0.000
+illum 2
+Ns 0.000
+Tr 1.00
+map_Kd Horsechestnut-a_33_2_44bb018f.png
+newmtl Horsechestnut-a_33_2_44bb072f
+Ka   0.500 0.500 0.500
+Kd   0.700 0.700 0.700
+Ks   0.000 0.000 0.000
+illum 2
+Ns 0.000
+Tr 1.00
+map_Kd Horsechestnut-a_33_2_44bb072f.png
+newmtl Horsechestnut-a_33_2_44bb065f
+Ka   0.500 0.500 0.500
+Kd   0.700 0.700 0.700
+Ks   0.000 0.000 0.000
+illum 2
+Ns 0.000
+Tr 1.00
+map_Kd Horsechestnut-a_33_2_44bb065f.png
