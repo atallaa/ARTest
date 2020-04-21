@@ -1,0 +1,27 @@
+# Material file for Lollipop4.obj
+
+newmtl Shadow
+	Ns 0
+	d 1
+	illum 2
+	Kd 0.1 0.1 0.1
+	Ks 0.0 0.0 0.0
+	Ka 0.1 0.1 0.1
+
+newmtl Trunk
+	Ns 0
+	d 1
+	illum 2
+	Kd 0.8 0.8 0.8
+	Ks 0.0 0.0 0.0
+	Ka -0.33 -0.99 -0.96
+
+newmtl Noyer_0030_2
+	Ns 0
+	d 1
+	illum 2
+	Kd 0.8 0.8 0.8
+	Ks 0.0 0.0 0.0
+	Ka 0.2 0.2 0.2
+	map_Kd Lollipop.png
+
