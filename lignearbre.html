@@ -7,33 +7,18 @@
     <a-scene embedded arjs>
 
       <a-assets>
-      <a-asset-item id="treeline-obj" src="https://raw.githubusercontent.com/atallaa/ARTest/master/3DModels/LigneArbres/LigneArbres2.obj"></a-asset-item>
-      <a-asset-item id="treeline-mtl" src="https://raw.githubusercontent.com/atallaa/ARTest/master/3DModels/LigneArbres/LigneArbres2.mtl"></a-asset-item>
-      <a-asset-item id="treeshadow-obj" src="https://raw.githubusercontent.com/atallaa/ARTest/master/3DModels/Lollipop4/Lollipop.obj"></a-asset-item>
-      <a-asset-item id="treeshadow-mtl" src="https://raw.githubusercontent.com/atallaa/ARTest/master/3DModels/Lollipop4/Lollipop.mtl"></a-asset-item>
+      <a-asset-item id="tree-obj" src="https://raw.githubusercontent.com/atallaa/ARTest/master/3DModels/Lollipop4/Lollipop4.obj"></a-asset-item>
+      <a-asset-item id="tree-mtl" src="https://raw.githubusercontent.com/atallaa/ARTest/master/3DModels/Lollipop4/Lollipop4.mtl"></a-asset-item>
     </a-assets>   
       
       <!-- _______________The markers________________ -->
-      <a-marker type='pattern' url='https://raw.githubusercontent.com/Sirius129/ARTest/master/Pattern/pattern-P1.patt'>
-        <!--<a-entity scale="0.2 0.2 0.2"
-                id="ligne"
-                obj-model="obj: #treeline-obj; mtl: #treeline-mtl;">-->
-                <a-entity scale="0.2 0.2 0.2"
-                id="shadow"
-                obj-model="obj: #treeshadow-obj; mtl: #treeshadow-mtl;">
+      <a-marker type='pattern' url='https://raw.githubusercontent.com/atallaa/ARTest/master/Pattern/pattern-P1.patt'>
+                <a-entity
+                scale="0.4 0.4 0.4"
+                id="tree"
+                obj-model="obj: #tree-obj; mtl: #tree-mtl;">
       </a-marker>
 
-       <a-marker  type='pattern' url='https://raw.githubusercontent.com/atallaa/ARPrototype/master/Pattern/pattern-N1.patt'>
-              <a-entity id="crop">
-            <a-plane id="gauche" height="0.2" width="1.5" position="-0.75 0 0" rotation="0 -90 0" material="src:https://raw.githubusercontent.com/atallaa/ARPrototype/master/3DModels/side-crop.jpg;" repeat="4.5 0.8"></a-plane>
-            <a-plane id="droite" height="0.2" width="1.5" position="0.75 0 0" rotation="0 90 0" material="src:https://raw.githubusercontent.com/atallaa/ARPrototype/master/3DModels/side-crop.jpg;" repeat="4.5 0.8"></a-plane>
-            <a-plane id="haut" height="1.5" width="1.5" position="0 0.1 0" rotation="-90 0 0" material="src:https://raw.githubusercontent.com/atallaa/ARPrototype/master/3DModels/crop.png" repeat="4.5 4.5"></></a-plane>
-            <a-plane id="devant" height="0.2" width="1.5" position="0 0 0.75" rotation="0 0 0" material="src:https://raw.githubusercontent.com/atallaa/ARPrototype/master/3DModels/side-crop.jpg;" repeat="4.5 0.6"></a-plane>
-            <a-plane id="arriere" height="0.2" width="1.5" position="0 0 -0.75" rotation="180 0 180" material="src:https://raw.githubusercontent.com/atallaa/ARPrototype/master/3DModels/side-crop.jpg;" repeat="4.5 0.8"></a-plane>
-          </a-entity>
-          </a-marker>
-
-      
       <a-entity camera></a-entity>
     </a-scene>
     
