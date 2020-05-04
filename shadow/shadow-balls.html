@@ -3,15 +3,15 @@
 	<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
 	<title>Hello, world!</title>
 	<!-- include three.js library -->
-	<script url='https://raw.githubusercontent.com/atallaa/ARTest/master/shadow/js/three.js'></script>
+	<script src='js/three.js'></script>
 	<!-- include jsartookit -->
-	<script url="https://raw.githubusercontent.com/atallaa/ARTest/master/shadow/jsartoolkit5/artoolkit.min.js"></script>
-	<script url="https://raw.githubusercontent.com/atallaa/ARTest/master/shadow/jsartoolkit5/artoolkit.api.js"></script>
+	<script src="jsartoolkit5/artoolkit.min.js"></script>
+	<script src="jsartoolkit5/artoolkit.api.js"></script>
 	<!-- include threex.artoolkit -->
-	<script url="https://raw.githubusercontent.com/atallaa/ARTest/master/shadow/threex/threex-artoolkitsource.js"></script>
-	<script url="https://raw.githubusercontent.com/atallaa/ARTest/master/shadow/threex/threex-artoolkitcontext.js"></script>
-	<script url="https://raw.githubusercontent.com/atallaa/ARTest/master/shadow/threex/threex-arbasecontrols.js"></script>
-	<script url="https://raw.githubusercontent.com/atallaa/ARTest/master/shadow/threex/threex-armarkercontrols.js"></script>
+	<script src="threex/threex-artoolkitsource.js"></script>
+	<script src="threex/threex-artoolkitcontext.js"></script>
+	<script src="threex/threex-arbasecontrols.js"></script>
+	<script src="threex/threex-armarkercontrols.js"></script>
 </head>
 
 <body style='margin : 0px; overflow: hidden; font-family: Monospace;'>
@@ -90,7 +90,7 @@ function initialize()
 
 	// create atToolkitContext
 	arToolkitContext = new THREEx.ArToolkitContext({
-		cameraParametersUrl: 'https://raw.githubusercontent.com/atallaa/ARTest/master/shadow/data/camera_para.dat',
+		cameraParametersUrl: 'data/camera_para.dat',
 		detectionMode: 'mono'
 	});
 	
@@ -107,7 +107,7 @@ function initialize()
 	markerRoot1 = new THREE.Group();
 	scene.add(markerRoot1);
 	let markerControls1 = new THREEx.ArMarkerControls(arToolkitContext, markerRoot1, {
-		type: 'pattern', patternUrl: "https://raw.githubusercontent.com/atallaa/ARTest/master/shadow/data/kanji.patt",
+		type: 'pattern', patternUrl: "data/kanji.patt",
 	})
 
 	////////////////////////////////////////////////////////////
@@ -122,21 +122,6 @@ function initialize()
 	let sceneGroup = new THREE.Group();
 	markerRoot1.add(sceneGroup);
 	
-	let texture = loader.load("https://raw.githubusercontent.com/atallaa/ARTest/master/shadow/images/color-grid.png");
-	// repeat texture
-	texture.wrapS = THREE.RepeatWrapping;
-	texture.wrapT = THREE.RepeatWrapping;
-	texture.repeat.set(8,1);
-	
-	shadowMesh = new THREE.Mesh( 
-		new THREE.TorusKnotGeometry(0.5, 0.2, 128, 16), // new THREE.SphereBufferGeometry(1, 32, 32), 
-		new THREE.MeshLambertMaterial({ map: texture })
-	);
-	shadowMesh.position.y = 1;
-	shadowMesh.castShadow = true;
-	shadowMesh.receiveShadow = true;
-	sceneGroup.add( shadowMesh );
-	
 	let floorGeometry = new THREE.PlaneGeometry( 20,20 );
 	let floorMaterial = new THREE.ShadowMaterial();
 	floorMaterial.opacity = 0.3;
@@ -144,7 +129,28 @@ function initialize()
 	floorMesh.rotation.x = -Math.PI/2;
 	floorMesh.receiveShadow = true;
 	sceneGroup.add( floorMesh );
-
+	
+	
+	ballMeshArray = [];
+	let ballTexture = loader.load("images/basketball-gray.png");
+	let ballColors = [ 0xff0000, 0x009900, 0xff8800, 0x0000ff ];
+	let p = 1;
+	let ballPositions = [ new THREE.Vector3(p,1,p), new THREE.Vector3(-p,1,p), 
+	                      new THREE.Vector3(-p,1,-p), new THREE.Vector3(p,1,-p) ];
+	for (let n = 0; n < 4; n++)
+	{
+		let ballMesh = new THREE.Mesh(
+			new THREE.SphereGeometry(0.5, 32, 32),
+			new THREE.MeshLambertMaterial({ 
+				map: ballTexture, 
+				color: ballColors[n]
+			})
+		);
+		ballMesh.position.copy(ballPositions[n]);
+		ballMesh.castShadow = true;
+		sceneGroup.add( ballMesh );
+		ballMeshArray[n] = ballMesh;
+	}
 	
 	let light = new THREE.PointLight( 0xffffff, 1, 100 );
 	light.position.set( 0,4,0 ); // default; light shining from top
@@ -173,8 +179,11 @@ function update()
 	// update artoolkit on every frame
 	if ( arToolkitSource.ready !== false )
 		arToolkitContext.update( arToolkitSource.domElement );
-		
-	shadowMesh.rotation.y -= 0.01;
+	
+	ballMeshArray[0].position.y = 1.2 * (Math.abs(Math.sin(2.00 * totalTime + 0.10)) + 0.5);
+	ballMeshArray[1].position.y = 1.1 * (Math.abs(Math.sin(2.33 * totalTime + 0.37)) + 0.5);
+	ballMeshArray[2].position.y = 1.3 * (Math.abs(Math.sin(2.71 * totalTime + 0.53)) + 0.5);
+	ballMeshArray[3].position.y = 0.9 * (Math.abs(Math.sin(3.02 * totalTime + 0.77)) + 0.5);
 }
 
 

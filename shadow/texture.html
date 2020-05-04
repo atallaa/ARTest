@@ -3,15 +3,15 @@
 	<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
 	<title>Hello, world!</title>
 	<!-- include three.js library -->
-	<script url='https://raw.githubusercontent.com/atallaa/ARTest/master/shadow/js/three.js'></script>
+	<script src='js/three.js'></script>
 	<!-- include jsartookit -->
-	<script url="https://raw.githubusercontent.com/atallaa/ARTest/master/shadow/jsartoolkit5/artoolkit.min.js"></script>
-	<script url="https://raw.githubusercontent.com/atallaa/ARTest/master/shadow/jsartoolkit5/artoolkit.api.js"></script>
+	<script src="jsartoolkit5/artoolkit.min.js"></script>
+	<script src="jsartoolkit5/artoolkit.api.js"></script>
 	<!-- include threex.artoolkit -->
-	<script url="https://raw.githubusercontent.com/atallaa/ARTest/master/shadow/threex/threex-artoolkitsource.js"></script>
-	<script url="https://raw.githubusercontent.com/atallaa/ARTest/master/shadow/threex/threex-artoolkitcontext.js"></script>
-	<script url="https://raw.githubusercontent.com/atallaa/ARTest/master/shadow/threex/threex-arbasecontrols.js"></script>
-	<script url="https://raw.githubusercontent.com/atallaa/ARTest/master/shadow/threex/threex-armarkercontrols.js"></script>
+	<script src="threex/threex-artoolkitsource.js"></script>
+	<script src="threex/threex-artoolkitcontext.js"></script>
+	<script src="threex/threex-arbasecontrols.js"></script>
+	<script src="threex/threex-armarkercontrols.js"></script>
 </head>
 
 <body style='margin : 0px; overflow: hidden; font-family: Monospace;'>
@@ -21,7 +21,6 @@
   Based on the AR.js library and examples created by Jerome Etienne: https://github.com/jeromeetienne/AR.js/
 -->
 
-
 <script>
 
 var scene, camera, renderer, clock, deltaTime, totalTime;
@@ -30,7 +29,7 @@ var arToolkitSource, arToolkitContext;
 
 var markerRoot1;
 
-var material1, mesh1;
+var mesh1;
 
 initialize();
 animate();
@@ -38,6 +37,9 @@ animate();
 function initialize()
 {
 	scene = new THREE.Scene();
+
+	let ambientLight = new THREE.AmbientLight( 0xcccccc, 0.5 );
+	scene.add( ambientLight );
 				
 	camera = new THREE.Camera();
 	scene.add(camera);
@@ -90,7 +92,7 @@ function initialize()
 
 	// create atToolkitContext
 	arToolkitContext = new THREEx.ArToolkitContext({
-		cameraParametersUrl: 'https://raw.githubusercontent.com/atallaa/ARTest/master/shadow/data/camera_para.dat',
+		cameraParametersUrl: 'data/camera_para.dat',
 		detectionMode: 'mono'
 	});
 	
@@ -107,74 +109,26 @@ function initialize()
 	markerRoot1 = new THREE.Group();
 	scene.add(markerRoot1);
 	let markerControls1 = new THREEx.ArMarkerControls(arToolkitContext, markerRoot1, {
-		type: 'pattern', patternUrl: "https://raw.githubusercontent.com/atallaa/ARTest/master/shadow/data/kanji.patt",
+		type: 'pattern', patternUrl: "data/hiro.patt",
 	})
 
-	////////////////////////////////////////////////////////////
-	// setup scene
-	////////////////////////////////////////////////////////////
-	
-	renderer.shadowMap.enabled = true;
-	renderer.shadowMap.type = THREE.PCFSoftShadowMap;
-	
+	let geometry1 = new THREE.PlaneBufferGeometry(1,1, 4,4);
 	let loader = new THREE.TextureLoader();
-		
-	let sceneGroup = new THREE.Group();
-	markerRoot1.add(sceneGroup);
+	let texture = loader.load( 'images/earth.jpg', render );
+	let material1 = new THREE.MeshBasicMaterial( { map: texture } );
 	
-	let texture = loader.load("https://raw.githubusercontent.com/atallaa/ARTest/master/shadow/images/color-grid.png");
-	// repeat texture
-	texture.wrapS = THREE.RepeatWrapping;
-	texture.wrapT = THREE.RepeatWrapping;
-	texture.repeat.set(8,1);
+	mesh1 = new THREE.Mesh( geometry1, material1 );
+	mesh1.rotation.x = -Math.PI/2;
 	
-	shadowMesh = new THREE.Mesh( 
-		new THREE.TorusKnotGeometry(0.5, 0.2, 128, 16), // new THREE.SphereBufferGeometry(1, 32, 32), 
-		new THREE.MeshLambertMaterial({ map: texture })
-	);
-	shadowMesh.position.y = 1;
-	shadowMesh.castShadow = true;
-	shadowMesh.receiveShadow = true;
-	sceneGroup.add( shadowMesh );
-	
-	let floorGeometry = new THREE.PlaneGeometry( 20,20 );
-	let floorMaterial = new THREE.ShadowMaterial();
-	floorMaterial.opacity = 0.3;
-	let floorMesh = new THREE.Mesh( floorGeometry, floorMaterial );
-	floorMesh.rotation.x = -Math.PI/2;
-	floorMesh.receiveShadow = true;
-	sceneGroup.add( floorMesh );
-
-	
-	let light = new THREE.PointLight( 0xffffff, 1, 100 );
-	light.position.set( 0,4,0 ); // default; light shining from top
-	light.castShadow = true;
-	sceneGroup.add( light );
-	
-	let lightSphere = new THREE.Mesh(
-		new THREE.SphereGeometry(0.1),
-		new THREE.MeshBasicMaterial({
-			color: 0xffffff,
-			transparent: true,
-			opacity: 0.8
-		})
-	);
-	lightSphere.position.copy( light.position );
-	sceneGroup.add( lightSphere );
-	
-	let ambientLight = new THREE.AmbientLight( 0x666666 );
-	sceneGroup.add( ambientLight );
-	// let helper = new THREE.CameraHelper( light.shadow.camera );
-	// sceneGroup.add( helper );
+	markerRoot1.add( mesh1 );
 }
+
 
 function update()
 {
 	// update artoolkit on every frame
 	if ( arToolkitSource.ready !== false )
 		arToolkitContext.update( arToolkitSource.domElement );
-		
-	shadowMesh.rotation.y -= 0.01;
 }
 
 
