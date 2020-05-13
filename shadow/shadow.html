@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <head>
 	<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
-	<title>Hello, world!</title>
+	<title>Shadow</title>
 	<!-- include three.js library -->
 	<script src='js/three.js'></script>
 	<!-- include jsartookit -->
@@ -28,7 +28,8 @@ var scene, camera, renderer, clock, deltaTime, totalTime;
 
 var arToolkitSource, arToolkitContext;
 
-var markerRoot1;
+var markerP1;
+//var markerP2;
 
 var material1, mesh1;
 
@@ -90,7 +91,7 @@ function initialize()
 
 	// create atToolkitContext
 	arToolkitContext = new THREEx.ArToolkitContext({
-		cameraParametersUrl: 'data/camera_para.dat',
+		cameraParametersUrl: 'https://raw.githubusercontent.com/atallaa/ARTest/master/shadow/data/camera_para.dat',
 		detectionMode: 'mono'
 	});
 	
@@ -100,14 +101,20 @@ function initialize()
 	});
 
 	////////////////////////////////////////////////////////////
-	// setup markerRoots
+	// setup markerPs
 	////////////////////////////////////////////////////////////
 
 	// build markerControls
-	markerRoot1 = new THREE.Group();
-	scene.add(markerRoot1);
-	let markerControls1 = new THREEx.ArMarkerControls(arToolkitContext, markerRoot1, {
-		type: 'pattern', patternUrl: "data/kanji.patt",
+	markerP1 = new THREE.Group();
+	scene.add(markerP1);
+	let markerControls1 = new THREEx.ArMarkerControls(arToolkitContext, markerP1, {
+		type: 'pattern', patternUrl: "https://raw.githubusercontent.com/atallaa/ARTest/master/Pattern/pattern-P1.patt",
+	})
+
+	markerP2 = new THREE.Group();
+	scene.add(markerP2);
+	let markerControls2 = new THREEx.ArMarkerControls(arToolkitContext, markerP2, {
+		type: 'pattern', patternUrl: "https://raw.githubusercontent.com/atallaa/ARTest/master/Pattern/pattern-P2.patt",
 	})
 
 	////////////////////////////////////////////////////////////
@@ -115,28 +122,30 @@ function initialize()
 	////////////////////////////////////////////////////////////
 	
 	renderer.shadowMap.enabled = true;
-	renderer.shadowMap.type = THREE.PCFSoftShadowMap;
-	
-	let loader = new THREE.TextureLoader();
-		
+	renderer.shadowMapType = THREE.PCFSoftShadowMap;
+			
 	let sceneGroup = new THREE.Group();
-	markerRoot1.add(sceneGroup);
+	markerP1.add(sceneGroup);
+	let loader = new THREE.TextureLoader();
+	let trunk = loader.load("images/bark.jpg");
+	let leaves = loader.load("images/green-leaves.jpg");
 	
-	let texture = loader.load("images/color-grid.png");
-	// repeat texture
-	texture.wrapS = THREE.RepeatWrapping;
-	texture.wrapT = THREE.RepeatWrapping;
-	texture.repeat.set(8,1);
-	
-	shadowMesh = new THREE.Mesh( 
-		new THREE.TorusKnotGeometry(0.5, 0.2, 128, 16), // new THREE.SphereBufferGeometry(1, 32, 32), 
-		new THREE.MeshLambertMaterial({ map: texture })
-	);
-	shadowMesh.position.y = 1;
-	shadowMesh.castShadow = true;
-	shadowMesh.receiveShadow = true;
-	sceneGroup.add( shadowMesh );
-	
+	let geometry = new THREE.CylinderGeometry( 0.10, 0.15, 1, 32 );
+	let material = new THREE.MeshLambertMaterial( {map: trunk} );
+	cylinderMesh = new THREE.Mesh( geometry, material );
+	cylinderMesh.position.y = 0.5;
+	cylinderMesh.castShadow = true;
+	cylinderMesh.receiveShadow = true;
+	sceneGroup.add( cylinderMesh );
+
+	let spheregeometry = new THREE.SphereGeometry( 1, 150 , 150);
+	let spherematerial = new THREE.MeshLambertMaterial( {map: leaves} );
+	sphereMesh = new THREE.Mesh( spheregeometry, spherematerial );
+	sphereMesh.position.y = 2;
+	sphereMesh.castShadow = true;
+	sphereMesh.receiveShadow = true;
+	sceneGroup.add( sphereMesh );
+
 	let floorGeometry = new THREE.PlaneGeometry( 20,20 );
 	let floorMaterial = new THREE.ShadowMaterial();
 	floorMaterial.opacity = 0.3;
@@ -144,11 +153,12 @@ function initialize()
 	floorMesh.rotation.x = -Math.PI/2;
 	floorMesh.receiveShadow = true;
 	sceneGroup.add( floorMesh );
-
 	
 	let light = new THREE.PointLight( 0xffffff, 1, 100 );
-	light.position.set( 0,4,0 ); // default; light shining from top
+	light.position.set( 0,8,8 ); // default; light shining from top
 	light.castShadow = true;
+	light.shadow.mapSize.width = 1024;
+	light.shadow.mapSize.height = 1024;
 	sceneGroup.add( light );
 	
 	let lightSphere = new THREE.Mesh(
@@ -174,7 +184,12 @@ function update()
 	if ( arToolkitSource.ready !== false )
 		arToolkitContext.update( arToolkitSource.domElement );
 		
-	shadowMesh.rotation.y -= 0.01;
+	if ( markerP2.visible )
+	{
+		let p = markerP2.getWorldPosition();
+		cylinderMesh.position.copy(p);
+		sphereMesh.position.copy(p);
+	}
 }
 
 
