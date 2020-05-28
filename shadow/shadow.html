@@ -24,7 +24,7 @@
 
 <script>
 
-var scene, sceneGroup, camera, renderer, clock, deltaTime, totalTime;
+var scene, camera, renderer, clock, deltaTime, totalTime;
 
 var arToolkitSource, arToolkitContext;
 
@@ -124,7 +124,7 @@ function initialize()
 	renderer.shadowMap.enabled = true;
 	renderer.shadowMapType = THREE.PCFSoftShadowMap;
 			
-	treeGroup = new THREE.Group();
+	let treeGroup = new THREE.Group();
 	let loader = new THREE.TextureLoader();
 	let trunk = loader.load("images/bark.jpg");
 	let leaves = loader.load("images/green-leaves.jpg");
