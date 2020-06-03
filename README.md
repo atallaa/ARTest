@@ -10,7 +10,7 @@
 * glb.html -> **P1**, **P2**, **Sun**
 * shadow.html -> **P1**, **P2**
 * shadowandsun.html -> **P1**, **P2**, **Sun**
-* three.html -> **P1**, **P2**, **P3**
+* lineORplane.html -> **P1**, **P2**, **P3**
 * worldpos3.html -> **P1**, **P2**
 * worldposition.html -> **P1**, **P2**, **Sun**
 * worldposition2.html -> **P1**
