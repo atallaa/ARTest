@@ -1,38 +1,11 @@
-<!DOCTYPE html>
-<head>
-	<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
-	<title>Shadow</title>
-	<!-- include three.js library -->
-	<script src='js/three.js'></script>
-	<!-- include jsartookit -->
-	<script src="jsartoolkit5/artoolkit.min.js"></script>
-	<script src="jsartoolkit5/artoolkit.api.js"></script>
-	<!-- include threex.artoolkit -->
-	<script src="threex/threex-artoolkitsource.js"></script>
-	<script src="threex/threex-artoolkitcontext.js"></script>
-	<script src="threex/threex-arbasecontrols.js"></script>
-	<script src="threex/threex-armarkercontrols.js"></script>
-</head>
-
-<body style='margin : 0px; overflow: hidden; font-family: Monospace;'>
-
-<!-- 
-  Example created by Lee Stemkoski: https://github.com/stemkoski
-  Based on the AR.js library and examples created by Jerome Etienne: https://github.com/jeromeetienne/AR.js/
--->
-
-
-<script>
-
 var scene, camera, renderer, clock, deltaTime, totalTime;
 
 var arToolkitSource, arToolkitContext;
 
-var markerP1;
-//var markerP2;
-
-var material1, mesh1;
-
+var markerP1, markerP2, trihedralGroup;
+var zVector = new THREE.Vector3();
+let xVector = new THREE.Vector3();
+let yVector = new THREE.Vector3();
 initialize();
 animate();
 
@@ -70,11 +43,11 @@ function initialize()
 
 	function onResize()
 	{
-		arToolkitSource.onResize()	
-		arToolkitSource.copySizeTo(renderer.domElement)	
+		arToolkitSource.onResizeElement()	
+		arToolkitSource.copyElementSizeTo(renderer.domElement)	
 		if ( arToolkitContext.arController !== null )
 		{
-			arToolkitSource.copySizeTo(arToolkitContext.arController.canvas)	
+			arToolkitSource.copyElementSizeTo(arToolkitContext.arController.canvas)	
 		}	
 	}
 
@@ -111,7 +84,7 @@ function initialize()
 	scene.add(markerP1);
 	let markerControls1 = new THREEx.ArMarkerControls(arToolkitContext, markerP1, {
 		type: 'pattern', patternUrl: "https://raw.githubusercontent.com/atallaa/ARTest/master/Pattern/pattern-P1.patt",
-	})
+	});
 
 	markerP2 = new THREE.Group();
 	scene.add(markerP2);
@@ -119,27 +92,23 @@ function initialize()
 		type: 'pattern', patternUrl: "https://raw.githubusercontent.com/atallaa/ARTest/master/Pattern/pattern-P2.patt",
 	})
 
-	markerSun = new THREE.Group();
-	scene.add(markerSun);
-	let markerControlsSun = new THREEx.ArMarkerControls(arToolkitContext, markerSun, {
-		type: 'pattern', patternUrl: "https://raw.githubusercontent.com/atallaa/ARTest/master/Pattern/pattern-sun.patt",
-	})
 
 	////////////////////////////////////////////////////////////
 	// setup scene
 	////////////////////////////////////////////////////////////
 	
+	// -- Définition du plan et de la normale
 	renderer.shadowMap.enabled = true;
 	renderer.shadowMapType = THREE.PCFSoftShadowMap;
 
+	// -- Creation of the tree for P4
 	////////////////////		
 	// Creating trees //
 	////////////////////
 	let treeGroup = new THREE.Group();
 	let loader = new THREE.TextureLoader();
 	let trunk = loader.load("images/bark.jpg");
-	let leaves = loader.load("images/green-leaves.jpg");
-	
+	let leaves = loader.load("images/green-leaves.jpg");	
 	// Creating the trunk
 	let geometry = new THREE.CylinderGeometry( 0.10, 0.15, 1, 32 );
 	let material = new THREE.MeshLambertMaterial( {map: trunk} );
@@ -148,7 +117,6 @@ function initialize()
 	cylinderMesh.castShadow = true;
 	cylinderMesh.receiveShadow = true;
 	treeGroup.add( cylinderMesh );
-
 	// Creating the leaves
 	let spheregeometry = new THREE.SphereGeometry( 0.6, 150 , 150);
 	let spherematerial = new THREE.MeshLambertMaterial( {map: leaves} );
@@ -157,62 +125,47 @@ function initialize()
 	sphereMesh.castShadow = true;
 	sphereMesh.receiveShadow = true;
 	treeGroup.add( sphereMesh );
+	markerP2.add( treeGroup );
 
-	// Copying the tree
-	let treeCopy = treeGroup.clone();
 
-	// Give trees to differents markers
-	markerP1.add(treeGroup);
-	markerP2.add(treeCopy);
 
-	//////////////////////
-	// Creating the sun //
-	//////////////////////
-	let lightGroup = new THREE.Group();
-
-	// Creating the floor for the shadows
-	let floorGeometry = new THREE.PlaneGeometry( 20,20 );
-	let floorMaterial = new THREE.ShadowMaterial();
-	floorMaterial.opacity = 0.4;
-	let floorMesh = new THREE.Mesh( floorGeometry, floorMaterial );
-	floorMesh.rotation.x = -Math.PI/2;
-	floorMesh.receiveShadow = true;
-	treeGroup.add( floorMesh );
-
-	// Creating the light
-	let light = new THREE.PointLight( 0xffffff, 2, 100 );
-	light.position.set( 0,2,0 ); // default; light shining from top
-	light.castShadow = true;
-	light.shadow.mapSize.width = 2048;
-	light.shadow.mapSize.height = 2048;
-	lightGroup.add( light );
-	
-	let lightSphere = new THREE.Mesh(
-		new THREE.SphereGeometry(0.1),
-		new THREE.MeshBasicMaterial({
-			color: 0xffffff, 
-			transparent: true,
-			opacity: 0
-		})
-	);
-	lightSphere.position.copy( light.position );
-	lightGroup.add( lightSphere );
-	markerSun.add( lightGroup );
-	
 }
 
 function update()
 {
-	// update artoolkit on every frame
 	if ( arToolkitSource.ready !== false )
 		arToolkitContext.update( arToolkitSource.domElement );
-		
-	if ( markerSun.visible )
-	{
-		
-	}
-}
+	scene.remove(trihedralGroup);
+	// --- Creating the trihedral
+	trihedralGroup = new THREE.Group();
+	let wp1 = markerP1.getWorldPosition();
+	zVector = markerP1.up;
+	console.log("Z Vector :" + zVector.toArray());
+	markerP1.getWorldDirection(xVector);
+	console.log("X Vector :" + xVector.toArray());
+	yVector.fromArray(math.cross(zVector.toArray(), xVector.toArray()));
+	console.log("Y Vector :" + yVector.toArray());
+	zLine = new THREE.ArrowHelper(zVector, wp1, 1, 0xff0000);
+	xLine = new THREE.ArrowHelper(xVector, wp1, 1, 0x0000ff);
+	yLine = new THREE.ArrowHelper(yVector, wp1, 1, 0x00ff00);
+	trihedralGroup.add(zLine);
+	trihedralGroup.add(xLine);
+	trihedralGroup.add(yLine);
+	scene.add(trihedralGroup);
+		/*
+	// --- Here we try to get the coordinates of P2 from P1 trihedral
+	let transformationMatrix = new THREE.Matrix4();
+	let P2Matrix = markerP2.matrix;
+	let P2Position = new THREE.Vector3();
+	let quaternion = new THREE.Quaternion();
+	let scale = new THREE.Vector3();
+	transformationMatrix.getInverse(markerP1.matrix);
+	P2Matrix.multiply(transformationMatrix);
+	P2Matrix.decompose(P2Position, quaternion, scale);
+	//console.log("P2 Matrix :");
+	//console.log(P2Position.toArray());*/
 
+}
 
 function render()
 {
@@ -228,8 +181,3 @@ function animate()
 	update();
 	render();
 }
-
-</script>
-
-</body>
-</html>

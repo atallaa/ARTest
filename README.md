@@ -15,5 +15,6 @@
 * worldpos3.html -> **P1**, **P2**
 * worldposition.html -> **P1**, **P2**, **Sun**
 * worldposition2.html -> **P1**
+* transformation.html -> **P1**, **P2**
 
 Les marqueurs sont présents dans le dossier "Pattern".

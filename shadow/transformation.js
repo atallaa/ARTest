@@ -2,11 +2,8 @@ var scene, camera, renderer, clock, deltaTime, totalTime;
 
 var arToolkitSource, arToolkitContext;
 
-var markerP1, markerP2, markerP3;
-
-var normal, xLine, yLine;
-
-var treeGroup;
+var xLine, yLine, zLine;
+var markerP1, markerP2, trihedralGroup;
 
 initialize();
 animate();
@@ -94,18 +91,6 @@ function initialize()
 		type: 'pattern', patternUrl: "https://raw.githubusercontent.com/atallaa/ARTest/master/Pattern/pattern-P2.patt",
 	})
 
-	markerP3 = new THREE.Group();
-	scene.add(markerP3);
-	let markerControls3 = new THREEx.ArMarkerControls(arToolkitContext, markerP3, {
-		type: 'pattern', patternUrl: "https://raw.githubusercontent.com/atallaa/ARTest/master/Pattern/pattern-P3.patt",
-	})
-
-	markerP4 = new THREE.Group();
-	scene.add(markerP4);
-	let markerControls4 = new THREEx.ArMarkerControls(arToolkitContext, markerP4, {
-		type: 'pattern', patternUrl: "https://raw.githubusercontent.com/atallaa/ARTest/master/Pattern/pattern-P4.patt",
-	})
-
 
 	////////////////////////////////////////////////////////////
 	// setup scene
@@ -114,15 +99,12 @@ function initialize()
 	// -- Définition du plan et de la normale
 	renderer.shadowMap.enabled = true;
 	renderer.shadowMapType = THREE.PCFSoftShadowMap;
-	scene.add(normal);
-	scene.add(xLine);
-	scene.add(yLine);
 
 	// -- Creation of the tree for P4
 	////////////////////		
 	// Creating trees //
 	////////////////////
-	treeGroup = new THREE.Group();
+	let treeGroup = new THREE.Group();
 	let loader = new THREE.TextureLoader();
 	let trunk = loader.load("images/bark.jpg");
 	let leaves = loader.load("images/green-leaves.jpg");	
@@ -142,63 +124,52 @@ function initialize()
 	sphereMesh.castShadow = true;
 	sphereMesh.receiveShadow = true;
 	treeGroup.add( sphereMesh );
+	markerP2.add( treeGroup );
 
-	scene.add(treeGroup);
+	// --- Creating the trihedral
+	trihedralGroup = new THREE.Group();
+	let zVector = new THREE.Vector3();
+	let xVector = new THREE.Vector3();
+	let yVector = new THREE.Vector3();
+	let wp1 = markerP1.getWorldPosition();
+	zVector = markerP1.up;
+	//console.log("Z Vector :" + zVector.toArray());
+	markerP1.getWorldDirection(xVector);
+	//console.log("X Vector :" + xVector.toArray());
+	yVector.fromArray(math.cross(zVector.toArray(), xVector.toArray()));
+	//console.log("Y Vector :" + yVector.toArray());
+
+	zLine = new THREE.ArrowHelper(zVector, wp1, 1, 0xff0000);
+	xLine = new THREE.ArrowHelper(xVector, wp1, 1, 0x0000ff);
+	yLine = new THREE.ArrowHelper(yVector, wp1, 1, 0x00ff00);
+	trihedralGroup.add(zLine);
+	trihedralGroup.add(xLine);
+	trihedralGroup.add(yLine);
+	markerP1.add(trihedralGroup);
+
 
 }
 
-function Plane()
+function transformation()
+// --- We get the position of the P2 Marker when our trihedral is the new basis and origin of the coordinate system.
+
 {
-	// --- Here we remove the outdated normal and plane.
-	scene.remove(normal);
-	scene.remove(xLine);
-	scene.remove(yLine);
+	// --- Here we calculate the 3 vectors of the new basis.
+	let xDir = new THREE.Vector3().fromArray(math.subtract(xLine.cone.getWorldPosition().toArray(), markerP1.getWorldPosition().toArray()));
+	let yDir = new THREE.Vector3().fromArray(math.subtract(yLine.cone.getWorldPosition().toArray(), markerP1.getWorldPosition().toArray()));
+	let zDir = new THREE.Vector3().fromArray(math.subtract(zLine.cone.getWorldPosition().toArray(), markerP1.getWorldPosition().toArray()));
+	
+	// --- Here we translate the origin.
+	let P2WorldPosition = markerP2.getWorldPosition();
+	let P1WorldPosition = markerP1.getWorldPosition();
+	let P2RealPosition = new THREE.Vector3();
+	P2RealPosition.fromArray(math.subtract(P2WorldPosition.toArray(), P1WorldPosition.toArray()));
 
-	// --- Then we get the coordinates of the markers
-	var wp1, wp2, wp3;
-	var points = new Array();
-	if (markerP1.visible)
-	{
-		wp1 = markerP1.getWorldPosition();
-		points.push(wp1);
-		//console.log("P1 World position: " + wp1.getComponent(0)+", "+ wp1.getComponent(1)+", "+ wp1.getComponent(2));
-	}
-	if (markerP2.visible)
-	{
-		wp2 = markerP2.getWorldPosition();
-		points.push(wp2);
-		//console.log("P2 World position: " + wp2.getComponent(0)+", "+ wp2.getComponent(1)+", "+ wp2.getComponent(2));
-	}
-	if (markerP3.visible)
-	{
-		wp3 = markerP3.getWorldPosition();
-		points.push(wp3);
-		//console.log("P3 World position: " + wp3.getComponent(0)+", "+ wp3.getComponent(1)+", "+ wp3.getComponent(2));
-	}
-
-	// --- Here we calculate the normal.
-	let v12 = [wp2.getComponent(0)-wp1.getComponent(0), wp2.getComponent(1)-wp1.getComponent(1), wp2.getComponent(2)-wp1.getComponent(2)]; 
-	let v13 = [wp3.getComponent(0)-wp1.getComponent(0), wp3.getComponent(1)-wp1.getComponent(1), wp3.getComponent(2)-wp1.getComponent(2)]; 
-	let normalDir = math.cross(v12, v13);
-	let normalNorm = math.sqrt(math.pow(normalDir[0],2) + math.pow(normalDir[1],2) + math.pow(normalDir[2],2));
-	let normalVector = new THREE.Vector3(normalDir[0]/normalNorm, normalDir[1]/normalNorm, normalDir[2]/normalNorm);
-
-	// --- Here we calculate the X line
-	let normX = math.sqrt(math.pow(v12[0],2) + math.pow(v12[1],2) + math.pow(v12[2],2));
-	let xVector = new THREE.Vector3(v12[0]/normX, v12[1]/normX, v12[2]/normX);
-
-	// --- Here we calculate the Y line
-	let yDir = math.cross([normalVector.getComponent(0), normalVector.getComponent(1), normalVector.getComponent(2)],[xVector.getComponent(0), xVector.getComponent(1), xVector.getComponent(2)]);
-	let yNorm = math.sqrt(math.pow(yDir[0],2) + math.pow(yDir[1],2) + math.pow(yDir[2],2));
-	let yVector = new THREE.Vector3(yDir[0]/yNorm, yDir[1]/yNorm, yDir[2]/yNorm);
-
-	// --- Finally we create the scene
-	normal = new THREE.ArrowHelper( normalVector, wp1, 1, 0xff0000);
-	xLine = new THREE.ArrowHelper(xVector, wp1, 1, 0x0000ff);
-	yLine = new THREE.ArrowHelper(yVector, wp1, 1, 0x00ff00);
-	scene.add(normal);
-	scene.add(xLine);
-	scene.add(yLine);
+	// --- And finally, we change the basis.
+	let transformationMatrix = math.matrix([xDir.toArray(), yDir.toArray(), zDir.toArray()]);
+	let P2FinalPosition = math.multiply(transformationMatrix, P2RealPosition.toArray());
+	
+	document.getElementById("coordinates").innerHTML = P2FinalPosition;
 }
 
 function update()
@@ -206,18 +177,7 @@ function update()
 	if ( arToolkitSource.ready !== false )
 		arToolkitContext.update( arToolkitSource.domElement );
 
-	// -- Test for the position of the tree without a marker
-	if (markerP4.visible)
-	{
-		wp4 = markerP4.getWorldPosition();
-		console.log("P1 World position: " + wp4.getComponent(0)+", "+ wp4.getComponent(1)+", "+ wp4.getComponent(2));
-		treeGroup.position.x = wp4.getComponent(0);
-		treeGroup.position.y = wp4.getComponent(1);
-		treeGroup.position.z = wp4.getComponent(2);
-	}
-
-	Plane();
-
+	transformation();
 }
 
 function render()
