@@ -1,0 +1,29 @@
+# Material file for SquareNoyer30b.obj
+
+newmtl Noyer1
+	Ns 0
+	d 0.999
+	illum 1
+	Kd 1.0 1.0 1.0
+	Ks 0.0 0.0 0.0
+	Ka 1.0 1.0 1.0
+	map_Ka Noyer_0030_1.png
+	map_Kd Noyer_0030_1.png
+
+newmtl Noyer2
+	Ns 0
+	d 0.999
+	Kd 1.0 1.0 1.0
+	Ks 0.0 0.0 0.0
+	Ka 1.0 1.0 1.0
+	map_Ka Noyer_0030_2.png
+	map_Kd Noyer_0030_2.png
+
+newmtl Noyer3
+	Ns 0
+	d 0.999
+	Kd 1.0 1.0 1.0
+	Ks 0.0 0.0 0.0
+	Ka 1.0 1.0 1.0
+	map_Ka Noyer_0030_0.png
+	map_Kd Noyer_0030_0.png

@@ -2,8 +2,10 @@ var scene, camera, renderer, clock, deltaTime, totalTime;
 
 var arToolkitSource, arToolkitContext;
 
-var xLine, yLine, zLine;
+var xLine, yLine, zLine, treeGroup, treeClone;
 var markerP1, markerP2, trihedralGroup;
+var P2Position;
+
 
 initialize();
 animate();
@@ -89,7 +91,7 @@ function initialize()
 	scene.add(markerP2);
 	let markerControls2 = new THREEx.ArMarkerControls(arToolkitContext, markerP2, {
 		type: 'pattern', patternUrl: "https://raw.githubusercontent.com/atallaa/ARTest/master/Pattern/pattern-P2.patt",
-	});
+	})
 
 
 	////////////////////////////////////////////////////////////
@@ -104,7 +106,7 @@ function initialize()
 	////////////////////		
 	// Creating trees //
 	////////////////////
-	let treeGroup = new THREE.Group();
+	treeGroup = new THREE.Object3D();
 	let loader = new THREE.TextureLoader();
 	let trunk = loader.load("images/bark.jpg");
 	let leaves = loader.load("images/green-leaves.jpg");	
@@ -127,7 +129,7 @@ function initialize()
 	markerP2.add( treeGroup );
 
 	// --- Creating the trihedral
-	trihedralGroup = new THREE.Group();
+	trihedralGroup = new THREE.Object3D();
 	let zVector = new THREE.Vector3();
 	let xVector = new THREE.Vector3();
 	let yVector = new THREE.Vector3();
@@ -146,13 +148,14 @@ function initialize()
 	trihedralGroup.add(xLine);
 	trihedralGroup.add(yLine);
 	markerP1.add(trihedralGroup);
+	treeClone = treeGroup.clone();
+
 
 
 }
 
 function transformation()
 // --- We get the position of the P2 Marker when our trihedral is the new basis and origin of the coordinate system.
-
 {
 	// --- Here we calculate the 3 vectors of the new basis.
 	let xDir = new THREE.Vector3().fromArray(math.subtract(xLine.cone.getWorldPosition().toArray(), markerP1.getWorldPosition().toArray()));
@@ -168,16 +171,38 @@ function transformation()
 	// --- And finally, we change the basis.
 	let transformationMatrix = math.matrix([xDir.toArray(), yDir.toArray(), zDir.toArray()]);
 	let P2FinalPosition = math.multiply(transformationMatrix, P2RealPosition.toArray());
-	
+	P2Position= [math.subset(P2FinalPosition, math.index(0)), math.subset(P2FinalPosition, math.index(1)), math.subset(P2FinalPosition, math.index(2))]
 	document.getElementById("coordinates").innerHTML = P2FinalPosition;
+	
+}
+
+function placement(treePosition)
+// --- We place the tree where the marker was.
+{
+	markerP1.add(treeGroup);
+	treeGroup.position.x = treePosition[1];
+	treeGroup.position.y = treePosition[2];
+	treeGroup.position.z = treePosition[0];
+	
 }
 
 function update()
 {
 	if ( arToolkitSource.ready !== false )
 		arToolkitContext.update( arToolkitSource.domElement );
+	
+	scene.remove(treeClone);
 
-	transformation();
+	if (markerP1.visible && markerP2.visible){
+		 transformation();
+		 markerP2.add(treeGroup);
+		treeGroup.position.x = 0;
+		treeGroup.position.y = 0;
+		treeGroup.position.z = 0;
+	}
+
+	if (!markerP2.visible)
+		placement(P2Position);
 }
 
 function render()

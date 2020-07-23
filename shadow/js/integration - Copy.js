@@ -1,9 +1,48 @@
-var scene, camera, renderer, clock, deltaTime, totalTime;
-
+var scene, camera, renderer, clock, deltaTime, totalTime, table;
 var arToolkitSource, arToolkitContext;
-
-var xLine, yLine, zLine;
+var xLine, yLine, zLine, treeGroup, treeClone;
 var markerP1, markerP2, trihedralGroup;
+var P2Position;
+var mesh;
+var growthIteration = 3;
+var markerTable = [];
+
+
+function onProgress(xhr) { /*console.log( (xhr.loaded / xhr.total * 100) + '% loaded' ); */ }
+function onError(xhr) { /*console.log( 'An error happened' ); */}
+
+function tree(marker)
+// Gives a tree to a specific marker
+{
+	// Remove the previous tree (the children, if there is one) from the marker.
+	for( var i = marker.children.length - 1; i >= 0; i--){
+		obj = marker.children[i];
+		marker.remove(obj);
+	}
+
+	// Add the new tree.
+	new THREE.MTLLoader()
+		.setPath( 'models/Noyer/' )
+		.load( Object.values(table[growthIteration])[2], function ( materials ) {
+			materials.preload();
+			new THREE.OBJLoader()
+				.setMaterials( materials )
+				.setPath( 'models/Noyer/' )
+				.load( Object.values(table[growthIteration])[3], function ( group ) {
+					mesh = group.children[0];
+					mesh.material.side = THREE.DoubleSide;
+					mesh.position.y = 0.25;
+					mesh.scale.set(0.25,0.25,0.25);
+					mesh.castShadow = true;
+					mesh.receiveShadow = true;
+					marker.add(mesh);
+				}, onProgress, onError );
+		});
+}
+
+
+d3.csv("models/noyer.csv").then(function(data) {
+  	table = Array.from(data);
 
 initialize();
 animate();
@@ -11,11 +50,12 @@ animate();
 function initialize()
 {
 	scene = new THREE.Scene();
+	growthIteration = 0;
+	let ambientLight = new THREE.AmbientLight( 0xcccccc, 1.0 );
+	scene.add( ambientLight );
 				
 	camera = new THREE.Camera();
 	scene.add(camera);
-	let ambientLight = new THREE.AmbientLight( 0x666666 );
-	scene.add(ambientLight);
 
 	renderer = new THREE.WebGLRenderer({
 		antialias : true,
@@ -42,11 +82,11 @@ function initialize()
 
 	function onResize()
 	{
-		arToolkitSource.onResizeElement()	
-		arToolkitSource.copyElementSizeTo(renderer.domElement)	
+		arToolkitSource.onResize()	
+		arToolkitSource.copySizeTo(renderer.domElement)	
 		if ( arToolkitContext.arController !== null )
 		{
-			arToolkitSource.copyElementSizeTo(arToolkitContext.arController.canvas)	
+			arToolkitSource.copySizeTo(arToolkitContext.arController.canvas)	
 		}	
 	}
 
@@ -65,7 +105,7 @@ function initialize()
 
 	// create atToolkitContext
 	arToolkitContext = new THREEx.ArToolkitContext({
-		cameraParametersUrl: 'https://raw.githubusercontent.com/atallaa/ARTest/master/shadow/data/camera_para.dat',
+		cameraParametersUrl: 'data/camera_para.dat',
 		detectionMode: 'mono'
 	});
 	
@@ -75,7 +115,7 @@ function initialize()
 	});
 
 	////////////////////////////////////////////////////////////
-	// setup markerPs
+	// setup the markers
 	////////////////////////////////////////////////////////////
 
 	// build markerControls
@@ -85,46 +125,77 @@ function initialize()
 		type: 'pattern', patternUrl: "https://raw.githubusercontent.com/atallaa/ARTest/master/Pattern/pattern-P1.patt",
 	});
 
+		markerSun = new THREE.Group();
+	scene.add(markerSun);
+	let markerControlsSun = new THREEx.ArMarkerControls(arToolkitContext, markerSun, {
+		type: 'pattern', patternUrl: "https://raw.githubusercontent.com/atallaa/ARTest/master/Pattern/pattern-sun.patt",
+	});
+
+	// Tree markers
 	markerP2 = new THREE.Group();
 	scene.add(markerP2);
 	let markerControls2 = new THREEx.ArMarkerControls(arToolkitContext, markerP2, {
 		type: 'pattern', patternUrl: "https://raw.githubusercontent.com/atallaa/ARTest/master/Pattern/pattern-P2.patt",
 	});
+	markerTable.push(markerP2);
+
+	markerP3 = new THREE.Group();
+	scene.add(markerP3);
+	let markerControls3 = new THREEx.ArMarkerControls(arToolkitContext, markerP3, {
+		type: 'pattern', patternUrl: "https://raw.githubusercontent.com/atallaa/ARTest/master/Pattern/pattern-P3.patt",
+	});
+	markerTable.push(markerP3);
+
+
+
 
 
 	////////////////////////////////////////////////////////////
-	// setup scene
+	// setting up the scene
 	////////////////////////////////////////////////////////////
 	
-	// -- Définition du plan et de la normale
 	renderer.shadowMap.enabled = true;
 	renderer.shadowMapType = THREE.PCFSoftShadowMap;
 
-	// -- Creation of the tree for P4
-	////////////////////		
-	// Creating trees //
-	////////////////////
-	let treeGroup = new THREE.Group();
-	let loader = new THREE.TextureLoader();
-	let trunk = loader.load("images/bark.jpg");
-	let leaves = loader.load("images/green-leaves.jpg");	
-	// Creating the trunk
-	let geometry = new THREE.CylinderGeometry( 0.10, 0.15, 1, 32 );
-	let material = new THREE.MeshLambertMaterial( {map: trunk} );
-	cylinderMesh = new THREE.Mesh( geometry, material );
-	cylinderMesh.position.y = 0.5;
-	cylinderMesh.castShadow = true;
-	cylinderMesh.receiveShadow = true;
-	treeGroup.add( cylinderMesh );
-	// Creating the leaves
-	let spheregeometry = new THREE.SphereGeometry( 0.6, 150 , 150);
-	let spherematerial = new THREE.MeshLambertMaterial( {map: leaves} );
-	sphereMesh = new THREE.Mesh( spheregeometry, spherematerial );
-	sphereMesh.position.y = 1.5;
-	sphereMesh.castShadow = true;
-	sphereMesh.receiveShadow = true;
-	treeGroup.add( sphereMesh );
-	markerP2.add( treeGroup );
+	//////////////////////
+	// Creating the tree //
+	//////////////////////
+	tree(markerP2);
+	tree(markerP3);
+
+	//////////////////////
+	// Creating the sun //
+	//////////////////////
+	let lightGroup = new THREE.Group();
+
+	// Creating the floor for the shadows
+	let floorGeometry = new THREE.PlaneGeometry( 20,20 );
+	let floorMaterial = new THREE.ShadowMaterial();
+	floorMaterial.opacity = 0.4;
+	let floorMesh = new THREE.Mesh( floorGeometry, floorMaterial );
+	floorMesh.rotation.x = -Math.PI/2;
+	floorMesh.receiveShadow = true;
+	lightGroup.add( floorMesh );
+
+	// Creating the light
+	let light = new THREE.PointLight( 0xffffff, 2, 100 );
+	light.position.set( 0,2,0 ); // default; light shining from top
+	light.castShadow = true;
+	light.shadow.mapSize.width = 2048;
+	light.shadow.mapSize.height = 2048;
+	lightGroup.add( light );
+	
+	let lightSphere = new THREE.Mesh(
+		new THREE.SphereGeometry(0.1),
+		new THREE.MeshBasicMaterial({
+			color: 0xffffff, 
+			transparent: true,
+			opacity: 0
+		})
+	);
+	lightSphere.position.copy( light.position );
+	lightGroup.add( lightSphere );
+	markerSun.add( lightGroup );
 
 	// --- Creating the trihedral
 	trihedralGroup = new THREE.Group();
@@ -133,11 +204,8 @@ function initialize()
 	let yVector = new THREE.Vector3();
 	let wp1 = markerP1.getWorldPosition();
 	zVector = markerP1.up;
-	//console.log("Z Vector :" + zVector.toArray());
 	markerP1.getWorldDirection(xVector);
-	//console.log("X Vector :" + xVector.toArray());
 	yVector.fromArray(math.cross(zVector.toArray(), xVector.toArray()));
-	//console.log("Y Vector :" + yVector.toArray());
 
 	zLine = new THREE.ArrowHelper(zVector, wp1, 1, 0xff0000);
 	xLine = new THREE.ArrowHelper(xVector, wp1, 1, 0x0000ff);
@@ -146,13 +214,12 @@ function initialize()
 	trihedralGroup.add(xLine);
 	trihedralGroup.add(yLine);
 	markerP1.add(trihedralGroup);
-
-
+		
 }
 
-function transformation()
-// --- We get the position of the P2 Marker when our trihedral is the new basis and origin of the coordinate system.
 
+function transformation(marker)
+// --- We get the position of the P2 Marker when our trihedral is the new basis and origin of the coordinate system.
 {
 	// --- Here we calculate the 3 vectors of the new basis.
 	let xDir = new THREE.Vector3().fromArray(math.subtract(xLine.cone.getWorldPosition().toArray(), markerP1.getWorldPosition().toArray()));
@@ -160,7 +227,7 @@ function transformation()
 	let zDir = new THREE.Vector3().fromArray(math.subtract(zLine.cone.getWorldPosition().toArray(), markerP1.getWorldPosition().toArray()));
 	
 	// --- Here we translate the origin.
-	let P2WorldPosition = markerP2.getWorldPosition();
+	let P2WorldPosition = marker.getWorldPosition();
 	let P1WorldPosition = markerP1.getWorldPosition();
 	let P2RealPosition = new THREE.Vector3();
 	P2RealPosition.fromArray(math.subtract(P2WorldPosition.toArray(), P1WorldPosition.toArray()));
@@ -177,8 +244,9 @@ function update()
 	if ( arToolkitSource.ready !== false )
 		arToolkitContext.update( arToolkitSource.domElement );
 
-	transformation();
+	transformation(markerP2);
 }
+
 
 function render()
 {
@@ -194,3 +262,24 @@ function animate()
 	update();
 	render();
 }
+
+});
+
+
+// Function to execute for the button 
+window.onload = function() {
+  document
+    .querySelector(".growth-button")
+    .addEventListener("click", function() {
+
+      for(let i=0 ; i < (markerTable.length); i++) {
+      	tree(markerTable[i]);
+      }
+	if(growthIteration==5){
+		growthIteration=0;
+	} else {
+		growthIteration++;  
+	}   
+   });
+    
+};
